@@ -3,7 +3,12 @@ using System.Collections;
 
 public class Camera2D: MonoBehaviour
 {
+	public new Transform transform;
+
 	public Transform Area;
+
+	public Transform target;
+
 
 	Vector3 CurrentPosition;
 	Vector3 CurrentScale;
@@ -32,6 +37,11 @@ public class Camera2D: MonoBehaviour
 		Vector3 destination = transform.position + delta;
 
 		transform.position = destination;
+	}
+
+    private void Update ()
+    {
+		transform.position = target.position;
 	}
 
 	public void LateUpdate()
