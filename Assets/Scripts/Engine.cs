@@ -34,12 +34,16 @@ namespace Car2D
 
 		public void ShiftUp ()
 		{
-			CurrentGear++;
+			if(CurrentGear < GearRatios.Length - 1) {
+				CurrentGear++;
+			}
 		}
 
 		public void ShiftDown ()
 		{
-			CurrentGear--;
+			if(CurrentGear > 0) {
+				CurrentGear--;
+			}
 		}
 
 		public float GetTorque (Rigidbody2D rb)
@@ -79,11 +83,9 @@ namespace Car2D
 			float rpm = GetRPM(rb);
 
 			if (rpm > 6200) {
-				if (CurrentGear < 5)
-					CurrentGear++;
+				ShiftUp();
 			} else if (rpm < 2000) {
-				if (CurrentGear > 0)
-					CurrentGear--;
+				ShiftDown();
 			}
 		}
 	}

@@ -18,7 +18,7 @@ namespace Car2D
 		private Engine Engine;
 
 		[SerializeField]
-		private GameObject CenterOfGravity;
+		private Transform CenterOfGravity;
 
 		[SerializeField]
 		bool IsPlayerControlled = false;
@@ -132,13 +132,13 @@ namespace Car2D
 
 		void Init ()
 		{
-
 			Velocity = Vector2.zero;
 			AbsoluteVelocity = 0;
 
 			// Dimensions
-			AxleFront.DistanceToCG = Vector2.Distance(CenterOfGravity.transform.position, AxleFront.transform.Find("Axle").transform.position);
-			AxleRear.DistanceToCG = Vector2.Distance(CenterOfGravity.transform.position, AxleRear.transform.Find("Axle").transform.position);
+			AxleFront.DistanceToCG = Vector2.Distance(CenterOfGravity.position, AxleFront.axel.position);
+			AxleRear.DistanceToCG = Vector2.Distance(CenterOfGravity.position, AxleRear.axel.position);
+
 			// Extend the calculations past actual car dimensions for better simulation
 			AxleFront.DistanceToCG *= AxleDistanceCorrection;
 			AxleRear.DistanceToCG *= AxleDistanceCorrection;
@@ -153,7 +153,6 @@ namespace Car2D
 
 		void Start ()
 		{
-
 			AxleFront.Init(Rigidbody2D, WheelBase);
 			AxleRear.Init(Rigidbody2D, WheelBase);
 
@@ -162,7 +161,6 @@ namespace Car2D
 
 		void Update ()
 		{
-
 			if (IsPlayerControlled) {
 
 				// Handle Input
@@ -233,7 +231,7 @@ namespace Car2D
 			}
 
 			// Update the "Center Of Gravity" dot to indicate the weight shift
-			CenterOfGravity.transform.localPosition = Vector2.Lerp(CenterOfGravity.transform.localPosition, pos, 0.1f);
+			CenterOfGravity.localPosition = Vector2.Lerp(CenterOfGravity.localPosition, pos, 0.1f);
 
 			// Skidmarks
 			if (Mathf.Abs(LocalAcceleration.y) > 18 || EBrake == 1) {
@@ -372,7 +370,6 @@ namespace Car2D
 
 		float SmoothSteering (float steerInput)
 		{
-
 			float steer = 0;
 
 			if (Mathf.Abs(steerInput) > 0.001f) {
@@ -391,7 +388,7 @@ namespace Car2D
 		float SpeedAdjustedSteering (float steerInput)
 		{
 			float activeVelocity = Mathf.Min(AbsoluteVelocity, 250.0f);
-			float steer = steerInput * (1.0f - (AbsoluteVelocity / SpeedSteerCorrection));
+			float steer = steerInput * (1.0f - (activeVelocity / SpeedSteerCorrection));
 			return steer;
 		}
 

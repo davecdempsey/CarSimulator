@@ -4,6 +4,7 @@ namespace Car2D
 {
 	public class Axle: MonoBehaviour
 	{
+		public Transform axel;
 
 		public float DistanceToCG { get; set; }
 		public float WeightRatio { get; set; }

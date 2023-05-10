@@ -4,6 +4,16 @@ namespace Car2D
 {
 	public class Tire: MonoBehaviour
 	{
+		[SerializeField]
+		private Transform _transform;
+		public new Transform transform {
+			get {
+				if(_transform == null) {
+					_transform = GetComponent<Transform>();
+				}
+				return _transform;
+			}
+		}
 
 		[SerializeField]
 		private float m_restingweight;
