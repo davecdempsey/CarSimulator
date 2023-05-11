@@ -41,7 +41,7 @@ public class Camera2D: MonoBehaviour
 
     private void Update ()
     {
-		transform.position = target.position;
+		transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
 	}
 
 	public void LateUpdate()
@@ -53,7 +53,4 @@ public class Camera2D: MonoBehaviour
 		}
 
 	}
-
-
-
 }

@@ -213,7 +213,8 @@ MonoBehaviour:
   m_angularVelocity: 0
   m_torque: 0
   Radius: 0.5
-  skidmarkPrefab: {fileID: 0}
+  skidmarkPrefab: {fileID: 1000013771545202, guid: 0c8c39e3fe446d441aa22893bd3519fa,
+    type: 3}
   skidmark: {fileID: 0}
 --- !u!1 &1753825046958425813
 GameObject:
@@ -488,7 +489,8 @@ MonoBehaviour:
   m_angularVelocity: 0
   m_torque: 0
   Radius: 0.5
-  skidmarkPrefab: {fileID: 0}
+  skidmarkPrefab: {fileID: 1000013771545202, guid: 0c8c39e3fe446d441aa22893bd3519fa,
+    type: 3}
   skidmark: {fileID: 0}
 --- !u!1 &1753825047843366896
 GameObject:
@@ -779,7 +781,8 @@ MonoBehaviour:
   m_angularVelocity: 0
   m_torque: 0
   Radius: 0.5
-  skidmarkPrefab: {fileID: 0}
+  skidmarkPrefab: {fileID: 1000013771545202, guid: 0c8c39e3fe446d441aa22893bd3519fa,
+    type: 3}
   skidmark: {fileID: 0}
 --- !u!1 &1753825048360789797
 GameObject:
@@ -961,6 +964,7 @@ GameObject:
   - component: {fileID: 1753825048795534511}
   - component: {fileID: 1753825048795534510}
   - component: {fileID: 1753825048795534505}
+  - component: {fileID: 1887933169694495682}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -1097,3 +1101,17 @@ MonoBehaviour:
   SpeedSteerCorrection: 295
   SpeedTurningStability: 11.8
   AxleDistanceCorrection: 1.7
+--- !u!114 &1887933169694495682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753825048795534509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e483a0a32674d41e4ba67cd74782bf48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  car: {fileID: 1753825048795534505}
+  input: {fileID: 11400000, guid: 68b7eee6f770146a1a81547e8bc03e46, type: 2}

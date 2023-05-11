@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Car2D
 {
+    [System.Serializable]
     public class InputBuffer
     {
         public Vector2 input = Vector2.zero;

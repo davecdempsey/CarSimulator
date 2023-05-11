@@ -124,6 +124,16 @@ namespace Car2D
 		float Brake;
 		float EBrake;
 
+		private InputBuffer _inputBuffer;
+		private InputBuffer inputBuffer {
+			get {
+				if(_inputBuffer == null) {
+					_inputBuffer = new InputBuffer();
+				}
+				return _inputBuffer;
+			}
+		}
+		
 		void Awake ()
 		{
 			Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -157,51 +167,84 @@ namespace Car2D
 			AxleRear.Init(Rigidbody2D, WheelBase);
 
 			TrackWidth = Vector2.Distance(AxleRear.TireLeft.transform.position, AxleRear.TireRight.transform.position);
-		}
+		}		
 
 		void Update ()
 		{
-			if (IsPlayerControlled) {
+			//if (IsPlayerControlled) {
 
-				// Handle Input
+			//	// Handle Input
+			//	Throttle = 0;
+			//	Brake = 0;
+			//	EBrake = 0;
+
+			//	if (Input.GetKey(KeyCode.UpArrow)) {
+			//		Throttle = 1;
+			//	} else if (Input.GetKey(KeyCode.DownArrow)) {
+			//		//Brake = 1;
+			//		Throttle = -1;
+			//	}
+			//	if (Input.GetKey(KeyCode.Space)) {
+			//		EBrake = 1;
+			//	}
+
+			//	float steerInput = 0;
+			//	if (Input.GetKey(KeyCode.LeftArrow)) {
+			//		steerInput = 1;
+			//	} else if (Input.GetKey(KeyCode.RightArrow)) {
+			//		steerInput = -1;
+			//	}
+
+			//	if (Input.GetKeyDown(KeyCode.A)) {
+			//		Engine.ShiftUp();
+			//	} else if (Input.GetKeyDown(KeyCode.Z)) {
+			//		Engine.ShiftDown();
+			//	}
+
+			//	// Apply filters to our steer direction
+			//	SteerDirection = SmoothSteering(steerInput);
+			//	SteerDirection = SpeedAdjustedSteering(SteerDirection);
+
+			//	// Calculate the current angle the tires are pointing
+			//	SteerAngle = SteerDirection * MaxSteerAngle;
+
+			//	// Set front axle tires rotation
+			//	AxleFront.TireRight.transform.localRotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * SteerAngle);
+			//	AxleFront.TireLeft.transform.localRotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * SteerAngle);
+			//}
+
+			if (inputBuffer.input.y > 0) {
+				Throttle = 1;
+			} else if (inputBuffer.input.y < 0) {
+				Throttle = -1;
+			} else {
 				Throttle = 0;
-				Brake = 0;
-				EBrake = 0;
+            }
 
-				if (Input.GetKey(KeyCode.UpArrow)) {
-					Throttle = 1;
-				} else if (Input.GetKey(KeyCode.DownArrow)) {
-					//Brake = 1;
-					Throttle = -1;
-				}
-				if (Input.GetKey(KeyCode.Space)) {
-					EBrake = 1;
-				}
-
-				float steerInput = 0;
-				if (Input.GetKey(KeyCode.LeftArrow)) {
-					steerInput = 1;
-				} else if (Input.GetKey(KeyCode.RightArrow)) {
-					steerInput = -1;
-				}
-
-				if (Input.GetKeyDown(KeyCode.A)) {
-					Engine.ShiftUp();
-				} else if (Input.GetKeyDown(KeyCode.Z)) {
-					Engine.ShiftDown();
-				}
-
-				// Apply filters to our steer direction
-				SteerDirection = SmoothSteering(steerInput);
-				SteerDirection = SpeedAdjustedSteering(SteerDirection);
-
-				// Calculate the current angle the tires are pointing
-				SteerAngle = SteerDirection * MaxSteerAngle;
-
-				// Set front axle tires rotation
-				AxleFront.TireRight.transform.localRotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * SteerAngle);
-				AxleFront.TireLeft.transform.localRotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * SteerAngle);
+			if(inputBuffer.shiftDownPressed) {
+				Engine.ShiftDown();
 			}
+
+			if(inputBuffer.shiftUpPressed) {
+				Engine.ShiftUp();
+			}
+
+			if(inputBuffer.eBrakePressed) {
+				EBrake = 1;
+			} else {
+				EBrake = 0;
+			}
+
+			// Apply filters to our steer direction
+			SteerDirection = SmoothSteering(inputBuffer.input.x);
+            SteerDirection = SpeedAdjustedSteering(SteerDirection);
+
+            // Calculate the current angle the tires are pointing
+            SteerAngle = SteerDirection * MaxSteerAngle;
+
+            // Set front axle tires rotation
+            AxleFront.TireRight.transform.localRotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * SteerAngle);
+            AxleFront.TireLeft.transform.localRotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * SteerAngle);
 
 
 			// Calculate weight center of four tires
@@ -248,7 +291,6 @@ namespace Car2D
 
 		void FixedUpdate ()
 		{
-
 			// Update from rigidbody to retain collision responses
 			Velocity = Rigidbody2D.velocity;
 			HeadingAngle = (Rigidbody2D.rotation + 90) * Mathf.Deg2Rad;
@@ -431,5 +473,41 @@ namespace Car2D
 		//		GUI.Label(new Rect(5, 545, 300, 20), "AxleR Torque: " + AxleRear.Torque.ToString());
 		//	}
 		//}
+
+		public void InputMovement(Vector2 axis)
+		{
+			// Update input buffer
+			inputBuffer.input = new Vector2(axis.x, axis.y);
+		}
+
+		public void PressShiftUp(bool value)
+		{
+			inputBuffer.shiftUpPressed = value;
+		}
+
+		public void PressShiftDown(bool value)
+		{
+			inputBuffer.shiftDownPressed = value;
+		}
+
+		public void PressEBreak(bool value)
+		{
+			inputBuffer.eBrakePressed = value;
+		}
+
+		private void ConsumeShiftUp()
+		{
+			inputBuffer.shiftUpPressed = false;
+		}
+
+		private void ConsumeShiftDown()
+		{
+			inputBuffer.shiftDownPressed = false;
+		}
+
+		private void ConsumeEBreak()
+		{
+			inputBuffer.eBrakePressed= false;
+		}
 	}
 }
