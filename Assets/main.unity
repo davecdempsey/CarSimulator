@@ -1100,11 +1100,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1753825048795534505, guid: 162ad61564b5c4429a316c8058619b94,
-        type: 3}
-      propertyPath: CenterOfGravity
-      value: 
-      objectReference: {fileID: 1753825048553078150}
     - target: {fileID: 1753825048795534508, guid: 162ad61564b5c4429a316c8058619b94,
         type: 3}
       propertyPath: m_RootOrder
@@ -1170,9 +1165,3 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 162ad61564b5c4429a316c8058619b94, type: 3}
---- !u!4 &1753825048553078150 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1753825048017537121, guid: 162ad61564b5c4429a316c8058619b94,
-    type: 3}
-  m_PrefabInstance: {fileID: 1753825048553078149}
-  m_PrefabAsset: {fileID: 0}

@@ -21,9 +21,6 @@ namespace Car2D
 		private Transform CenterOfGravity;
 
 		[SerializeField]
-		bool IsPlayerControlled = false;
-
-		[SerializeField]
 		[Range(0f, 1f)]
 		float CGHeight = 0.55f;
 
@@ -171,48 +168,6 @@ namespace Car2D
 
 		void Update ()
 		{
-			//if (IsPlayerControlled) {
-
-			//	// Handle Input
-			//	Throttle = 0;
-			//	Brake = 0;
-			//	EBrake = 0;
-
-			//	if (Input.GetKey(KeyCode.UpArrow)) {
-			//		Throttle = 1;
-			//	} else if (Input.GetKey(KeyCode.DownArrow)) {
-			//		//Brake = 1;
-			//		Throttle = -1;
-			//	}
-			//	if (Input.GetKey(KeyCode.Space)) {
-			//		EBrake = 1;
-			//	}
-
-			//	float steerInput = 0;
-			//	if (Input.GetKey(KeyCode.LeftArrow)) {
-			//		steerInput = 1;
-			//	} else if (Input.GetKey(KeyCode.RightArrow)) {
-			//		steerInput = -1;
-			//	}
-
-			//	if (Input.GetKeyDown(KeyCode.A)) {
-			//		Engine.ShiftUp();
-			//	} else if (Input.GetKeyDown(KeyCode.Z)) {
-			//		Engine.ShiftDown();
-			//	}
-
-			//	// Apply filters to our steer direction
-			//	SteerDirection = SmoothSteering(steerInput);
-			//	SteerDirection = SpeedAdjustedSteering(SteerDirection);
-
-			//	// Calculate the current angle the tires are pointing
-			//	SteerAngle = SteerDirection * MaxSteerAngle;
-
-			//	// Set front axle tires rotation
-			//	AxleFront.TireRight.transform.localRotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * SteerAngle);
-			//	AxleFront.TireLeft.transform.localRotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * SteerAngle);
-			//}
-
 			if (inputBuffer.input.y > 0) {
 				Throttle = 1;
 			} else if (inputBuffer.input.y < 0) {
