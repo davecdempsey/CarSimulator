@@ -4,7 +4,7 @@ namespace Car2D
 {
 	public class Axle: MonoBehaviour
 	{
-		public Transform axel;
+		public Transform axle;
 
 		public float DistanceToCG { get; set; }
 		public float WeightRatio { get; set; }
@@ -24,6 +24,8 @@ namespace Car2D
 				return (TireLeft.Torque + TireRight.Torque) / 2f;
 			}
 		}
+
+		public float turnDirection => TireLeft.turnDirection;
 
 		[SerializeField]
 		private Tire m_leftTire;

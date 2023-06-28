@@ -81,6 +81,7 @@ namespace Car2D
 			}
 		}
 
+		public float turnDirection => transform.rotation.eulerAngles.z;
 
 		public float Radius = 0.5f;
 

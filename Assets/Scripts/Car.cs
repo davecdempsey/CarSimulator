@@ -5,8 +5,10 @@ namespace Car2D
 {
 	public class Car: MonoBehaviour
 	{
+		public bool showStats = false;
+
 		[SerializeField]
-		private Rigidbody2D Rigidbody2D;
+		public Rigidbody2D Rigidbody2D;
 
 		[SerializeField]
 		private Axle AxleFront;
@@ -15,84 +17,54 @@ namespace Car2D
 		private Axle AxleRear;
 
 		[SerializeField]
+		private float FrontTurnDirection;
+
+		[SerializeField]
 		private Engine Engine;
+
+		[SerializeField]
+		private CarModel model;
 
 		[SerializeField]
 		private Transform CenterOfGravity;
 
-		[SerializeField]
-		[Range(0f, 1f)]
-		float CGHeight = 0.55f;
+		float CGHeight => model.CGHeight;
 
-		[SerializeField]
-		[Range(0f, 2f)]
-		float InertiaScale = 1f;
+		float InertiaScale => model.InertiaScale;
 
-		[SerializeField]
-		float BrakePower = 12000;
+		float BrakePower => model.BrakePower;
 
-		[SerializeField]
-		float EBrakePower = 5000;
+		float EBrakePower => model.BrakePower;
 
-		[SerializeField]
-		[Range(0f, 1f)]
-		float WeightTransfer = 0.35f;
+		float WeightTransfer => model.WeightTransfer;
 
-		[SerializeField]
-		[Range(0f, 1f)]
-		float MaxSteerAngle = 0.75f;
+		float MaxSteerAngle => model.MaxSteerAngle;
 
-		[SerializeField]
-		[Range(0f, 20f)]
-		float CornerStiffnessFront = 5.0f;
+		float CornerStiffnessFront => model.CornerStiffnessFront;
 
-		[SerializeField]
-		[Range(0f, 20f)]
-		float CornerStiffnessRear = 5.2f;
+		float CornerStiffnessRear => model.CornerStiffnessRear;
 
-		[SerializeField]
-		[Range(0f, 20f)]
-		float AirResistance = 2.5f;
+		float AirResistance => model.AirResistance;
 
-		[SerializeField]
-		[Range(0f, 20f)]
-		float RollingResistance = 8.0f;
+		float RollingResistance => model.RollingResistance;
 
-		[SerializeField]
-		[Range(0f, 1f)]
-		float EBrakeGripRatioFront = 0.9f;
+		float EBrakeGripRatioFront => model.EBrakeGripRatioFront;
 
-		[SerializeField]
-		[Range(0f, 5f)]
-		float TotalTireGripFront = 2.5f;
+		float TotalTireGripFront => model.TotalTireGripFront;
 
-		[SerializeField]
-		[Range(0f, 1f)]
-		float EBrakeGripRatioRear = 0.4f;
+		float EBrakeGripRatioRear => model.EBrakeGripRatioRear;
 
-		[SerializeField]
-		[Range(0f, 5f)]
-		float TotalTireGripRear = 2.5f;
+		float TotalTireGripRear => model.TotalTireGripRear;
 
-		[SerializeField]
-		[Range(0f, 5f)]
-		float SteerSpeed = 2.5f;
+		float SteerSpeed => model.SteerSpeed;
 
-		[SerializeField]
-		[Range(0f, 5f)]
-		float SteerAdjustSpeed = 1f;
+		float SteerAdjustSpeed => model.SteerAdjustSpeed;
 
-		[SerializeField]
-		[Range(0f, 1000f)]
-		float SpeedSteerCorrection = 300f;
+		float SpeedSteerCorrection => model.SpeedSteerCorrection;
 
-		[SerializeField]
-		[Range(0f, 20f)]
-		float SpeedTurningStability = 10f;
+		float SpeedTurningStability => model.SpeedTurningStability;
 
-		[SerializeField]
-		[Range(0f, 10f)]
-		float AxleDistanceCorrection = 2f;
+		float AxleDistanceCorrection => model.AxleDistanceCorrection;
 
 		public float SpeedKilometersPerHour {
 			get {
@@ -101,15 +73,23 @@ namespace Car2D
 		}
 
 		// Variables that get initialized via code
+		[SerializeField]
 		float Inertia = 1;
+		[SerializeField]
 		float WheelBase = 1;
+		[SerializeField]
 		float TrackWidth = 1;
 
 		// Private vars
+		[SerializeField]
 		float HeadingAngle;
+		[SerializeField]
 		float AbsoluteVelocity;
+		[SerializeField]
 		float AngularVelocity;
+		[SerializeField]
 		float SteerDirection;
+		[SerializeField]
 		float SteerAngle;
 
 		Vector2 Velocity;
@@ -121,6 +101,7 @@ namespace Car2D
 		float Brake;
 		float EBrake;
 
+		[SerializeField]
 		private InputBuffer _inputBuffer;
 		private InputBuffer inputBuffer {
 			get {
@@ -130,7 +111,10 @@ namespace Car2D
 				return _inputBuffer;
 			}
 		}
-		
+
+		private string className => this.GetType().ToString();
+		private string debugCategory => "#" + className + "#";
+
 		void Awake ()
 		{
 			Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -143,8 +127,8 @@ namespace Car2D
 			AbsoluteVelocity = 0;
 
 			// Dimensions
-			AxleFront.DistanceToCG = Vector2.Distance(CenterOfGravity.position, AxleFront.axel.position);
-			AxleRear.DistanceToCG = Vector2.Distance(CenterOfGravity.position, AxleRear.axel.position);
+			AxleFront.DistanceToCG = Vector2.Distance(CenterOfGravity.position, AxleFront.axle.position);
+			AxleRear.DistanceToCG = Vector2.Distance(CenterOfGravity.position, AxleRear.axle.position);
 
 			// Extend the calculations past actual car dimensions for better simulation
 			AxleFront.DistanceToCG *= AxleDistanceCorrection;
@@ -168,9 +152,13 @@ namespace Car2D
 
 		void Update ()
 		{
-			if (inputBuffer.input.y > 0) {
+			SetDirections();
+
+			if (inputBuffer.trottlePressed && inputBuffer.reverseIsPressed) {
+				Throttle = 0;
+			} else if (inputBuffer.trottlePressed) { 
 				Throttle = 1;
-			} else if (inputBuffer.input.y < 0) {
+			} else if (inputBuffer.reverseIsPressed) {
 				Throttle = -1;
 			} else {
 				Throttle = 0;
@@ -191,8 +179,8 @@ namespace Car2D
 			}
 
 			// Apply filters to our steer direction
-			SteerDirection = SmoothSteering(inputBuffer.input.x);
-            SteerDirection = SpeedAdjustedSteering(SteerDirection);
+			SteerDirection = SmoothSteering(inputBuffer.steerInput, inputBuffer.directionalSteering);
+			SteerDirection = SpeedAdjustedSteering(SteerDirection);
 
             // Calculate the current angle the tires are pointing
             SteerAngle = SteerDirection * MaxSteerAngle;
@@ -365,12 +353,22 @@ namespace Car2D
 			Rigidbody2D.MoveRotation(Mathf.Rad2Deg * HeadingAngle - 90);
 		}
 
-		float SmoothSteering (float steerInput)
+		private void SetDirections()
+        {
+			FrontTurnDirection = AxleFront.turnDirection;
+		}
+
+		float SmoothSteering (float steerInput, bool directionalSteering)
 		{
 			float steer = 0;
 
-			if (Mathf.Abs(steerInput) > 0.001f) {
-				steer = Mathf.Clamp(SteerDirection + steerInput * Time.deltaTime * SteerSpeed, -1.0f, 1.0f);
+			if(Mathf.Abs(steerInput) > 0.001f) {
+				if (directionalSteering) {
+					float steerDiff = SteerDiff(steerInput);
+					steer = Mathf.Clamp(SteerDirection + steerDiff * Time.deltaTime * SteerSpeed, -1.0f, 1.0f);
+				} else {
+					steer = Mathf.Clamp(SteerDirection + steerInput * Time.deltaTime * SteerSpeed, -1.0f, 1.0f);
+				}
 			} else {
 				if (SteerDirection > 0) {
 					steer = Mathf.Max(SteerDirection - Time.deltaTime * SteerAdjustSpeed, 0);
@@ -382,6 +380,24 @@ namespace Car2D
 			return steer;
 		}
 
+		float SteerDiff(float steerInput)
+        {
+			float delta = Mathf.DeltaAngle(steerInput * Mathf.Rad2Deg, FrontTurnDirection) * Mathf.Deg2Rad * -1.0f;
+
+			if (delta > 0) {
+				float testDelta = delta - (360.0f * Mathf.Deg2Rad);
+				if (Mathf.Abs(delta) > Mathf.Abs(testDelta)) {
+					return testDelta;
+                }
+            } else {
+				float testDelta = delta + (360.0f * Mathf.Deg2Rad);
+				if(Mathf.Abs(delta) > Mathf.Abs(testDelta)) {
+					return testDelta;
+				}
+			}
+			return delta;
+		}
+
 		float SpeedAdjustedSteering (float steerInput)
 		{
 			float activeVelocity = Mathf.Min(AbsoluteVelocity, 250.0f);
@@ -389,80 +405,57 @@ namespace Car2D
 			return steer;
 		}
 
-		//void OnGUI ()
-		//{
-		//	if (IsPlayerControlled) {
-		//		GUI.Label(new Rect(5, 5, 300, 20), "Speed: " + SpeedKilometersPerHour.ToString());
-		//		GUI.Label(new Rect(5, 25, 300, 20), "RPM: " + Engine.GetRPM(Rigidbody2D).ToString());
-		//		GUI.Label(new Rect(5, 45, 300, 20), "Gear: " + (Engine.CurrentGear + 1).ToString());
-		//		GUI.Label(new Rect(5, 65, 300, 20), "LocalAcceleration: " + LocalAcceleration.ToString());
-		//		GUI.Label(new Rect(5, 85, 300, 20), "Acceleration: " + Acceleration.ToString());
-		//		GUI.Label(new Rect(5, 105, 300, 20), "LocalVelocity: " + LocalVelocity.ToString());
-		//		GUI.Label(new Rect(5, 125, 300, 20), "Velocity: " + Velocity.ToString());
-		//		GUI.Label(new Rect(5, 145, 300, 20), "SteerAngle: " + SteerAngle.ToString());
-		//		GUI.Label(new Rect(5, 165, 300, 20), "Throttle: " + Throttle.ToString());
-		//		GUI.Label(new Rect(5, 185, 300, 20), "Brake: " + Brake.ToString());
+        void OnGUI()
+        {
+            if(showStats) {
+                GUI.Label(new Rect(5, 5, 300, 20), "Speed: " + SpeedKilometersPerHour.ToString());
+                GUI.Label(new Rect(5, 25, 300, 20), "RPM: " + Engine.GetRPM(Rigidbody2D).ToString());
+                GUI.Label(new Rect(5, 45, 300, 20), "Gear: " + (Engine.CurrentGear + 1).ToString());
+                GUI.Label(new Rect(5, 65, 300, 20), "LocalAcceleration: " + LocalAcceleration.ToString());
+                GUI.Label(new Rect(5, 85, 300, 20), "Acceleration: " + Acceleration.ToString());
+                GUI.Label(new Rect(5, 105, 300, 20), "LocalVelocity: " + LocalVelocity.ToString());
+                GUI.Label(new Rect(5, 125, 300, 20), "Velocity: " + Velocity.ToString());
+                GUI.Label(new Rect(5, 145, 300, 20), "SteerAngle: " + SteerAngle.ToString());
+                GUI.Label(new Rect(5, 165, 300, 20), "Throttle: " + Throttle.ToString());
+                GUI.Label(new Rect(5, 185, 300, 20), "Brake: " + Brake.ToString());
 
-		//		GUI.Label(new Rect(5, 205, 300, 20), "HeadingAngle: " + HeadingAngle.ToString());
-		//		GUI.Label(new Rect(5, 225, 300, 20), "AngularVelocity: " + AngularVelocity.ToString());
+                GUI.Label(new Rect(5, 205, 300, 20), "HeadingAngle: " + HeadingAngle.ToString());
+                GUI.Label(new Rect(5, 225, 300, 20), "AngularVelocity: " + AngularVelocity.ToString());
 
-		//		GUI.Label(new Rect(5, 245, 300, 20), "TireFL Weight: " + AxleFront.TireLeft.ActiveWeight.ToString());
-		//		GUI.Label(new Rect(5, 265, 300, 20), "TireFR Weight: " + AxleFront.TireRight.ActiveWeight.ToString());
-		//		GUI.Label(new Rect(5, 285, 300, 20), "TireRL Weight: " + AxleRear.TireLeft.ActiveWeight.ToString());
-		//		GUI.Label(new Rect(5, 305, 300, 20), "TireRR Weight: " + AxleRear.TireRight.ActiveWeight.ToString());
+                GUI.Label(new Rect(5, 245, 300, 20), "TireFL Weight: " + AxleFront.TireLeft.ActiveWeight.ToString());
+                GUI.Label(new Rect(5, 265, 300, 20), "TireFR Weight: " + AxleFront.TireRight.ActiveWeight.ToString());
+                GUI.Label(new Rect(5, 285, 300, 20), "TireRL Weight: " + AxleRear.TireLeft.ActiveWeight.ToString());
+                GUI.Label(new Rect(5, 305, 300, 20), "TireRR Weight: " + AxleRear.TireRight.ActiveWeight.ToString());
 
-		//		GUI.Label(new Rect(5, 325, 300, 20), "TireFL Friction: " + AxleFront.TireLeft.FrictionForce.ToString());
-		//		GUI.Label(new Rect(5, 345, 300, 20), "TireFR Friction: " + AxleFront.TireRight.FrictionForce.ToString());
-		//		GUI.Label(new Rect(5, 365, 300, 20), "TireRL Friction: " + AxleRear.TireLeft.FrictionForce.ToString());
-		//		GUI.Label(new Rect(5, 385, 300, 20), "TireRR Friction: " + AxleRear.TireRight.FrictionForce.ToString());
+                GUI.Label(new Rect(5, 325, 300, 20), "TireFL Friction: " + AxleFront.TireLeft.FrictionForce.ToString());
+                GUI.Label(new Rect(5, 345, 300, 20), "TireFR Friction: " + AxleFront.TireRight.FrictionForce.ToString());
+                GUI.Label(new Rect(5, 365, 300, 20), "TireRL Friction: " + AxleRear.TireLeft.FrictionForce.ToString());
+                GUI.Label(new Rect(5, 385, 300, 20), "TireRR Friction: " + AxleRear.TireRight.FrictionForce.ToString());
 
-		//		GUI.Label(new Rect(5, 405, 300, 20), "TireFL Grip: " + AxleFront.TireLeft.Grip.ToString());
-		//		GUI.Label(new Rect(5, 425, 300, 20), "TireFR Grip: " + AxleFront.TireRight.Grip.ToString());
-		//		GUI.Label(new Rect(5, 445, 300, 20), "TireRL Grip: " + AxleRear.TireLeft.Grip.ToString());
-		//		GUI.Label(new Rect(5, 465, 300, 20), "TireRR Grip: " + AxleRear.TireRight.Grip.ToString());
+                GUI.Label(new Rect(5, 405, 300, 20), "TireFL Grip: " + AxleFront.TireLeft.Grip.ToString());
+                GUI.Label(new Rect(5, 425, 300, 20), "TireFR Grip: " + AxleFront.TireRight.Grip.ToString());
+                GUI.Label(new Rect(5, 445, 300, 20), "TireRL Grip: " + AxleRear.TireLeft.Grip.ToString());
+                GUI.Label(new Rect(5, 465, 300, 20), "TireRR Grip: " + AxleRear.TireRight.Grip.ToString());
 
-		//		GUI.Label(new Rect(5, 485, 300, 20), "AxleF SlipAngle: " + AxleFront.SlipAngle.ToString());
-		//		GUI.Label(new Rect(5, 505, 300, 20), "AxleR SlipAngle: " + AxleRear.SlipAngle.ToString());
+                GUI.Label(new Rect(5, 485, 300, 20), "AxleF SlipAngle: " + AxleFront.SlipAngle.ToString());
+                GUI.Label(new Rect(5, 505, 300, 20), "AxleR SlipAngle: " + AxleRear.SlipAngle.ToString());
 
-		//		GUI.Label(new Rect(5, 525, 300, 20), "AxleF Torque: " + AxleFront.Torque.ToString());
-		//		GUI.Label(new Rect(5, 545, 300, 20), "AxleR Torque: " + AxleRear.Torque.ToString());
-		//	}
-		//}
+                GUI.Label(new Rect(5, 525, 300, 20), "AxleF Torque: " + AxleFront.Torque.ToString());
+                GUI.Label(new Rect(5, 545, 300, 20), "AxleR Torque: " + AxleRear.Torque.ToString());
+            }
+        }
 
-		public void InputMovement(Vector2 axis)
-		{
-			// Update input buffer
-			inputBuffer.input = new Vector2(axis.x, axis.y);
+        private void OnDrawGizmos()
+        {
+			if (inputBuffer.rawInput.magnitude == 0) {
+				return;
+            }
+			Gizmos.DrawRay(transform.localPosition, inputBuffer.rawInput);
 		}
 
-		public void PressShiftUp(bool value)
-		{
-			inputBuffer.shiftUpPressed = value;
-		}
-
-		public void PressShiftDown(bool value)
-		{
-			inputBuffer.shiftDownPressed = value;
-		}
-
-		public void PressEBreak(bool value)
-		{
-			inputBuffer.eBrakePressed = value;
-		}
-
-		private void ConsumeShiftUp()
-		{
-			inputBuffer.shiftUpPressed = false;
-		}
-
-		private void ConsumeShiftDown()
-		{
-			inputBuffer.shiftDownPressed = false;
-		}
-
-		private void ConsumeEBreak()
-		{
-			inputBuffer.eBrakePressed= false;
-		}
+		public void ConsumeInputBuffer(InputBuffer inputBuffer)
+        {
+			this.inputBuffer.UpdateWith(inputBuffer);
+        }
 	}
 }

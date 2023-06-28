@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef1d2e85bc6384e47aa87d0c9a0eb200, type: 3}
+  m_Name: New Halo Model
+  m_EditorClassIdentifier: 
+  CGHeight: 0.55
+  InertiaScale: 1
+  BrakePower: 12000
+  EBrakePower: 5000
+  WeightTransfer: 0.35
+  MaxSteerAngle: 0.75
+  CornerStiffnessFront: 5
+  CornerStiffnessRear: 5.2
+  AirResistance: 2.5
+  RollingResistance: 8
+  EBrakeGripRatioFront: 0.9
+  TotalTireGripFront: 2.5
+  EBrakeGripRatioRear: 0.4
+  TotalTireGripRear: 2.5
+  SteerSpeed: 2.5
+  SteerAdjustSpeed: 1
+  SpeedSteerCorrection: 300
+  SpeedTurningStability: 10
+  AxleDistanceCorrection: 2

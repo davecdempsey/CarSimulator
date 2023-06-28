@@ -539,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce498e21a85060b488dd9e5b28747a50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axel: {fileID: 1753825048736659796}
+  axle: {fileID: 1753825048736659796}
   m_leftTire: {fileID: 1753825047163005062}
   m_rightTire: {fileID: 1753825048215588747}
 --- !u!1 &1753825047985172218
@@ -589,7 +589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce498e21a85060b488dd9e5b28747a50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axel: {fileID: 1753825048360789796}
+  axle: {fileID: 1753825048360789796}
   m_leftTire: {fileID: 1753825046924800863}
   m_rightTire: {fileID: 1753825046955674839}
 --- !u!1 &1753825048017537126
@@ -1076,31 +1076,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e26dfb546b01c49800c6bd2ab66c0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showStats: 0
+  direction: {x: 0, y: 0}
+  angleDirection: 0
   Rigidbody2D: {fileID: 1753825048795534511}
   AxleFront: {fileID: 1753825047843366898}
   AxleRear: {fileID: 1753825047985171972}
   Engine: {fileID: 11400000, guid: 8d8040e65988f4a48bfd4e042d698f08, type: 2}
+  model: {fileID: 11400000, guid: 24cb2c52af23b48c3978f23ebe4fc643, type: 2}
   CenterOfGravity: {fileID: 1753825048017537121}
-  IsPlayerControlled: 1
-  CGHeight: 0.55
-  InertiaScale: 1
-  BrakePower: 12000
-  EBrakePower: 4800
-  WeightTransfer: 0.24
-  MaxSteerAngle: 0.797
-  CornerStiffnessFront: 5
-  CornerStiffnessRear: 5.2
-  AirResistance: 2.5
-  RollingResistance: 8
-  EBrakeGripRatioFront: 0.9
-  TotalTireGripFront: 2.5
-  EBrakeGripRatioRear: 0.4
-  TotalTireGripRear: 2.5
-  SteerSpeed: 2.5
-  SteerAdjustSpeed: 1
-  SpeedSteerCorrection: 295
-  SpeedTurningStability: 11.8
-  AxleDistanceCorrection: 1.7
 --- !u!114 &1887933169694495682
 MonoBehaviour:
   m_ObjectHideFlags: 0

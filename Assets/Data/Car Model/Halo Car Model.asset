@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef1d2e85bc6384e47aa87d0c9a0eb200, type: 3}
+  m_Name: Halo Car Model
+  m_EditorClassIdentifier: 
+  CGHeight: 0.55
+  InertiaScale: 1
+  BrakePower: 12000
+  EBrakePower: 5000
+  WeightTransfer: 0.8
+  MaxSteerAngle: 1
+  CornerStiffnessFront: 20
+  CornerStiffnessRear: 20
+  AirResistance: 2.5
+  RollingResistance: 8
+  EBrakeGripRatioFront: 0.9
+  TotalTireGripFront: 1.22
+  EBrakeGripRatioRear: 0.4
+  TotalTireGripRear: 1.43
+  SteerSpeed: 5
+  SteerAdjustSpeed: 5
+  SpeedSteerCorrection: 100
+  SpeedTurningStability: 2.2
+  AxleDistanceCorrection: 1.7

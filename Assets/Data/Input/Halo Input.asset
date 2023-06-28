@@ -9,15 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 835a7d74aec4b81479aadee5c165a386, type: 3}
-  m_Name: Basic Engine
+  m_Script: {fileID: 11500000, guid: aedade783265847f58420a28528d4b29, type: 3}
+  m_Name: Halo Input
   m_EditorClassIdentifier: 
-  TorqueCurve: 640000001801000045010000a4010000cc010000540100002c01000064000000
-  GearRatios:
-  - 5.8
-  - 4.5
-  - 3.74
-  - 2.8
-  - 1.6
-  - 0.79
-  - 4.2
+  _inputBuffer:
+    input: {x: 0, y: 0}
+    shiftUpPressed: 0
+    shiftDownPressed: 0
+    eBrakePressed: 0
+  direction: 0
